@@ -1,10 +1,10 @@
 *******************
-hstdp Documentation
+caldp Documentation
 *******************
 
-This is the documentation for hstdp.
+This is the documentation for caldp.
 
 Reference/API
 =============
 
-.. automodapi:: hstdp
+.. automodapi:: caldp
