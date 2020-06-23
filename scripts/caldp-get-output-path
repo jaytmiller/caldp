@@ -2,7 +2,7 @@
 #-*-python-*-
 import sys
 
-from hstdputils import process
+from caldp import process
 
 s3_output_path = sys.argv[1]
 ipppssoot = sys.argv[2]

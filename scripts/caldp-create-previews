@@ -12,5 +12,5 @@
 input_uri_prefix=$1
 output_uri_prefix=$2
 
-python -m hstdputils.create_previews ${input_uri_prefix} ${output_uri_prefix}
+python -m caldp.create_previews ${input_uri_prefix} ${output_uri_prefix}
 
