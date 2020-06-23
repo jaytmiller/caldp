@@ -1,16 +1,16 @@
-# Wrapper scripts for processing and container
+# Wrapper scripts for processing, container buiding / runtime usage
 
 ## caldp-process
 
 This is the primary processing script which provides a clean entry
-point for running the container while also capturing a combined
+point for a single IPPPSSOOT while also capturing a combined
 processing log, runtime metrics including peak memory consumption, and
-also doing environment setup.
+also doing environment setup for e.g. AWS CRDS.
 
 ## caldp-docker-run-container
 
-This provides a standard way of running the container including mapping in
-any host directories and mapping any required ports.
+This provides a standard way of running the container locally including mapping
+in $HOME as r/w and mapping any required ports.
 
 ## caldp-docker-run-pipeline
 
@@ -33,11 +33,10 @@ a dynamically downloaded demand based cache.
 
 ## caldp-s3-env
 
-CRDS environment variables required for operating relative to AWS S3
-with no server connection.
+Source to define CRDS environment variables required for operating relative to
+AWS S3 with no server connection.
 
 ## caldp-cal-env
 
-HST CAL s/w environment variables independent of but sometimes related
-to CRDS env vars which also describe locations of reference files.
-
+Source to define HST CAL s/w environment variables independent of but sometimes
+related to CRDS env vars which also describe locations of reference files.
