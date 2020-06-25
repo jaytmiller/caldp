@@ -1,0 +1,7 @@
+#! /bin/bash -xu
+
+source caldp-image-config
+
+tag=${1:-${CALDP_DEFAULT_TAG}}
+
+docker push ${CALDP_IMAGE_REPO}:${tag}

@@ -1,8 +1,0 @@
-#! /bin/bash -xu
-
-tag=${1:-dev}
-
-# e.g. export CALDP_DOCKER_IMAGE=jaytmiller/caldp
-# e.g. export CALDP_DOCKER_IMAGE=162808325377.dkr.ecr.us-east-1.amazonaws.com/caldp
-
-docker build -t ${CALDP_DOCKER_IMAGE}:${tag} .

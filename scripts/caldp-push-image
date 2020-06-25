@@ -1,5 +1,0 @@
-#! /bin/bash
-
-tag=${1:-dev}
-
-docker push ${CALDP_DOCKER_IMAGE}:${tag}
