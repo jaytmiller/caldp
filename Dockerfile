@@ -21,8 +21,22 @@ RUN pip install awscli boto3
 # RUN pip install jupyterlab
 RUN pip install spec-plots==1.34.6
 
-# Install s/w dev tools
-yum install -y emacs-nox gcc gcc-c++ python3 python3-devel htop wget git libpng-devel libjpeg-devel libcurl-devel make gcc-gfortran tar
+# Install s/w dev tools for fitscut build
+RUN yum install -y \
+   emacs-nox \
+   make \
+   gcc \
+   gcc-c++ \
+   gcc-gfortran \
+   python3 \
+   python3-devel \
+   htop \
+   wget \
+   git \
+   libpng-devel \
+   libjpeg-devel \
+   libcurl-devel \
+   tar
 
 # Install fitscut
 COPY scripts/caldp-install-fitscut  .
