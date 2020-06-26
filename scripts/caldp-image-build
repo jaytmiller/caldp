@@ -2,8 +2,6 @@
 
 # This script is used to build the caldp container image using Docker.
 
-source caldp-image-config
+source caldp-image-config $*
 
-tag=${1:-${CALDP_DEFAULT_TAG}}
-
-docker build -f Dockerfile -t ${CALDP_IMAGE_REPO}:${tag} .
+docker build -f Dockerfile -t ${CALDP_DOCKER_IMAGE} .
