@@ -18,7 +18,8 @@ ls -ld .
 
 if [ $s3_output_path != "none" ]; then
     echo ........................................ S3 read check  ..............................................
-    aws s3 ls $1
+    bucket=`echo $s3_output_path | cut -d'/' -f3`
+    aws s3 ls $bucket
     if [[ $? -ne  0 ]]; then
         echo "XXXXXX  S3 read check failed at ${s3_output_path}."
         exit 1
