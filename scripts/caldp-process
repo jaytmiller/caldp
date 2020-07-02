@@ -2,10 +2,13 @@
 
 # Primary command script passed into Batch container runs
 
-# caldp-process  s3-output-path   ipppssoot
+# caldp-process  pipeline_prefix   ipppssoot
 
-s3_output_path=$1
+pipeline_prefix=$1    # prefix identifying string used to derive S3, SNS, SQS, Batch, etc. names.
 ipppssoot=$2
+
+s3_output_path="s3://${pipeline_prefix}-pipeline-outputs"
+s3_messaging_path="${s3_output_path}/messages"
 
 source caldp-s3-env
 source caldp-cal-env
@@ -19,6 +22,10 @@ ls -ld .
 if [ $s3_output_path != "none" ]; then
     echo ........................................ S3 read check  ..............................................
     aws s3 ls $1
+    if [[ $? -ne  0 ]]; then
+        echo "XXXXXX  S3 read check failed at ${s3_output_path}."
+        exit 1
+    endif
 fi
 
 echo ........................................ processing log ..............................................
@@ -49,12 +56,26 @@ echo ........................................ preview metrics ..................
 cat preview_metrics.txt
 
 echo ........................................ handling outputs ............................................
+# Note: this action is not logged since log files are being transferred.
 if [ $s3_output_path != "none" ]; then
+    # Copy out processing log and metrics
     aws s3 cp  --quiet process.txt          ${processing_s3_output_dir}/
     aws s3 cp  --quiet process_metrics.txt  ${processing_s3_output_dir}/
 
+    # Copy out preview log and metrics
     aws s3 cp  --quiet preview.txt          ${previews_s3_output_dir}/
     aws s3 cp  --quiet preview_metrics.txt  ${previews_s3_output_dir}/
+
+    aws s3 cp  --quiet process.txt          ${processing_s3_output_dir}/
+
+   if [[ $process_exit_status -eq 0 && $preview_exit_status -eq 0 ]]; then
+        message_type="dataset-processed"
+    else
+        message_type="dataset-error"
+    fi
+    echo "Messaging ${message_type}"
+    echo ${message_type} ${ipppssoot} >${ipppssoot}
+    aws s3 cp --quiet ${ipppssoot}  ${s3_messaging_path}/${message_type}/${ipppssoot}
 fi
 
 [[ $process_exit_status -eq 0 && $preview_exit_status -eq 0 ]] || exit 1
