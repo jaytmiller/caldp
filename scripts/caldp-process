@@ -2,13 +2,10 @@
 
 # Primary command script passed into Batch container runs
 
-# caldp-process  pipeline_prefix   ipppssoot
+# caldp-process  s3_output_path  ipppssoot
 
-pipeline_prefix=$1    # prefix identifying string used to derive S3, SNS, SQS, Batch, etc. names.
+s3_output_path=$1    
 ipppssoot=$2
-
-s3_output_path="s3://${pipeline_prefix}-pipeline-outputs"
-s3_messaging_path="${s3_output_path}/messages"
 
 source caldp-s3-env
 source caldp-cal-env
@@ -30,15 +27,15 @@ fi
 
 echo ........................................ processing log ..............................................
 set -o pipefail && /usr/bin/time --verbose -o process_metrics.txt \
-    python -m caldp.process $s3_output_path $ipppssoot \
+    python -m caldp.process $s3_output_path/data $ipppssoot \
     |& tee process.txt
 process_exit_status=$?
 echo "Processing exit status ${process_exit_status}"
 
-processing_s3_output_dir=`caldp-get-output-path  $s3_output_path $ipppssoot`
+processing_s3_output_dir=`caldp-get-output-path  $s3_output_path/data $ipppssoot`
 echo "Processing s3_output_dir is" $processing_s3_output_dir
 
-previews_s3_output_dir=${processing_s3_output_dir}/previews
+previews_s3_output_dir="${processing_s3_output_dir}/data/previews"
 echo "Previews s3_output_dir is" $previews_s3_output_dir
 
 echo ........................................ previews log ................................................
@@ -75,7 +72,7 @@ if [ $s3_output_path != "none" ]; then
     fi
     echo "Messaging ${message_type}"
     echo ${message_type} ${ipppssoot} >${ipppssoot}
-    aws s3 cp --quiet ${ipppssoot}  ${s3_messaging_path}/${message_type}/${ipppssoot}
+    aws s3 cp --quiet ${ipppssoot}  ${s3_output_path}/messages/${message_type}/${ipppssoot}
 fi
 
 [[ $process_exit_status -eq 0 && $preview_exit_status -eq 0 ]] || exit 1
