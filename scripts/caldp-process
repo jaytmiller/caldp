@@ -4,7 +4,7 @@
 
 # caldp-process  s3_output_path  ipppssoot
 
-s3_output_path=$1    
+s3_output_path=$1
 ipppssoot=$2
 
 source caldp-s3-env
@@ -22,7 +22,7 @@ if [ $s3_output_path != "none" ]; then
     if [[ $? -ne  0 ]]; then
         echo "XXXXXX  S3 read check failed at ${s3_output_path}."
         exit 1
-    endif
+    fi
 fi
 
 echo ........................................ processing log ..............................................
@@ -35,7 +35,7 @@ echo "Processing exit status ${process_exit_status}"
 processing_s3_output_dir=`caldp-get-output-path  $s3_output_path/data $ipppssoot`
 echo "Processing s3_output_dir is" $processing_s3_output_dir
 
-previews_s3_output_dir="${processing_s3_output_dir}/data/previews"
+previews_s3_output_dir="${processing_s3_output_dir}/previews"
 echo "Previews s3_output_dir is" $previews_s3_output_dir
 
 echo ........................................ previews log ................................................
@@ -65,13 +65,13 @@ if [ $s3_output_path != "none" ]; then
 
     aws s3 cp  --quiet process.txt          ${processing_s3_output_dir}/
 
-   if [[ $process_exit_status -eq 0 && $preview_exit_status -eq 0 ]]; then
+    if [[ $process_exit_status -eq 0 && $preview_exit_status -eq 0 ]]; then
         message_type="dataset-processed"
     else
         message_type="dataset-error"
     fi
     echo "Messaging ${message_type}"
-    echo ${message_type} ${ipppssoot} >${ipppssoot}
+    echo "${message_type} ${ipppssoot}" >${ipppssoot}
     aws s3 cp --quiet ${ipppssoot}  ${s3_output_path}/messages/${message_type}/${ipppssoot}
 fi
 
