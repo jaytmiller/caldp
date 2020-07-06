@@ -7,6 +7,8 @@
 s3_output_path=$1
 ipppssoot=$2
 
+echo "Starting caldp-process at {s3_output_path} for {ipppssoot}."
+
 source caldp-s3-env
 source caldp-cal-env
 
