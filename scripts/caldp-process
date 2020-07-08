@@ -38,6 +38,9 @@ echo "Processing exit status ${process_exit_status}"
 processing_s3_output_dir=`caldp-get-output-path  $s3_output_path/data $ipppssoot`
 echo "Processing s3_output_dir is" $processing_s3_output_dir
 
+logs_s3_output_dir=`caldp-get-output-path  $s3_output_path/data $ipppssoot`/logs
+echo "Logs s3_output_dir is" $logs_s3_output_dir
+
 previews_s3_output_dir="${processing_s3_output_dir}/previews"
 echo "Previews s3_output_dir is" $previews_s3_output_dir
 
@@ -59,14 +62,12 @@ echo ........................................ handling outputs .................
 # Note: this action is not logged since log files are being transferred.
 if [ $s3_output_path != "none" ]; then
     # Copy out processing log and metrics
-    aws s3 cp  --quiet process.txt          ${processing_s3_output_dir}/
-    aws s3 cp  --quiet process_metrics.txt  ${processing_s3_output_dir}/
+    aws s3 cp  --quiet process.txt          ${logs_s3_output_dir}/
+    aws s3 cp  --quiet process_metrics.txt  ${logs_s3_output_dir}/
 
     # Copy out preview log and metrics
-    aws s3 cp  --quiet preview.txt          ${previews_s3_output_dir}/
-    aws s3 cp  --quiet preview_metrics.txt  ${previews_s3_output_dir}/
-
-    aws s3 cp  --quiet process.txt          ${processing_s3_output_dir}/
+    aws s3 cp  --quiet preview.txt          ${logs_s3_output_dir}/
+    aws s3 cp  --quiet preview_metrics.txt  ${logs_s3_output_dir}/
 
     if [[ $process_exit_status -eq 0 && $preview_exit_status -eq 0 ]]; then
         message_type="dataset-processed"
