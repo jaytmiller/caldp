@@ -384,7 +384,10 @@ class Wfc3Manager(InstrumentManager):
 class CosManager(InstrumentManager):
     """Manages calibration for one COS IPPPSSOOT."""
     instrument_name = "cos"
-    download_suffixes = ["ASN", "RAW", "EPC", "RAWACCUM", "RAWACCUM_A", "RAWACCUM_B", "RAWACQ", "RAWTAG", "RAWTAG_A", "RAWTAG_B"]
+    download_suffixes = ["ASN", "RAW", "EPC", "SPT",
+                         "RAWACCUM", "RAWACCUM_A", "RAWACCUM_B",
+                         "RAWACQ",
+                         "RAWTAG", "RAWTAG_A", "RAWTAG_B"]
     stage1 = "calcos"
     stage2 = None
     ignore_err_nums = [
