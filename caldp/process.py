@@ -18,6 +18,7 @@ import subprocess
 
 import boto3
 
+from astropy.io import fits
 from drizzlepac.hlautils.astroquery_utils import retrieve_observation
 
 from crds.bestrefs import bestrefs
@@ -393,6 +394,13 @@ class CosManager(InstrumentManager):
     ignore_err_nums = [
         5,    # Ignore calcos errors from RAWACQ
     ]
+
+    def raw_files(self, files):
+        """Customize to set RANSEED to 1 in raw files for consistent outputs."""
+        raw = super(CosManager, self).raw_files(files)
+        for f in raw:
+            fits.setval(f, "RANSEED", value=1)
+        return raw
 
     def unassoc_files(self, files):
         """Returns only the first file returned by raw_files()."""
